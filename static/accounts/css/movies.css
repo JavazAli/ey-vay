@@ -1,0 +1,225 @@
+/* ===== صفحه ===== */
+
+body {
+    font-family: Vazirmatn, sans-serif;
+    background-color: #f3f4f6;
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+}
+
+/* ===== کانتینر اصلی ===== */
+
+.container {
+    width: 75%;
+    margin: 40px auto;
+}
+
+/* ===== هدر ===== */
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* تیتر */
+.page-header h1 {
+    margin: 0;
+    font-size: 36px;
+    font-weight: 800;
+    color: #333;
+}
+
+/* دکمه‌ها در هدر */
+.header-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* دکمه بازگشت به پنل ادمین */
+.back-btn {
+    background-color: #6b7280a3; 
+    color: white;
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 18px;
+    transition: 0.2s;
+}
+
+.back-btn:hover {
+    background-color: #4b5563;
+}
+
+/* دکمه افزودن */
+.add-btn {
+    background: #ef4444;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 18px;
+    transition: 0.2s;
+}
+
+.add-btn:hover {
+    background: #dc2626;
+}
+
+/* ===== کارت جدول ===== */
+
+.table-card {
+    background: white;
+    border-radius: 16px;
+    padding: 10px 0;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+/* ===== جدول ===== */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #f9fafb;
+    padding: 14px;
+    font-weight: bold;
+    color: #444;
+    border-bottom: 1px solid #eee;
+}
+
+td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #f1f1f1;
+    vertical-align: middle;
+}
+
+/* متن‌های بلند */
+
+.summary {
+    max-width: 260px;
+    word-wrap: break-word;
+}
+
+.actors {
+    max-width: 220px;
+    word-wrap: break-word;
+}
+
+/* ===== دکمه‌ها ===== */
+
+.edit-btn {
+    background: #ffba59;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 13px;
+    margin-left: 6px;
+}
+
+.delete-btn {
+    background: #ef4444;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+/* ===== فرم ===== */
+
+.form-card {
+    background: white;
+    width: 600px;
+    margin: 40px auto;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.form-card h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* فیلدها */
+
+.form-card input,
+.form-card textarea,
+.form-card select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+/* دکمه‌های فرم */
+
+.form-buttons {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.submit-btn {
+    background: #ef4444;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.cancel-btn {
+    background: #9ca3af;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+/* پیام‌ها */
+
+.messages-container {
+    width: auto;            
+    max-width: 400px;        
+    margin: 20px auto;       
+    text-align: center;      
+}
+
+.alert {
+    display: inline-block;   
+    padding: 8px 12px;       
+    border-radius: 8px;
+    font-size: 15px;         
+    font-weight: 500;
+    color: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.alert.success {
+    background-color: #24c45fb7;
+}
+
+.alert.error {
+    background-color: #ef4444e6;
+}
+
+.alert.warning {
+    background-color: #facc15e0;
+    color: #000;
+}
+
+.alert.info {
+    background-color: #3ba2f6da;
+}

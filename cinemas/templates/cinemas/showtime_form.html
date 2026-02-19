@@ -1,0 +1,41 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'accounts/css/movies.css' %}">
+
+{% if messages %}
+  <div class="messages-container">
+    {% for message in messages %}
+      <div class="alert {{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<div class="form-card">
+
+    <h2>فرم ثبت / ویرایش سانس</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <label>تاریخ</label>
+        {{ form.date }}
+
+        <label>ساعت شروع</label>
+        {{ form.start_time }}
+
+        <label>سینما</label>
+        {{ form.cinema }}
+
+        <div class="form-buttons">
+            <button type="submit" class="submit-btn">
+                ثبت
+            </button>
+            <a href="{% url 'showtime_list' %}" class="cancel-btn">
+                انصراف
+            </a>
+        </div>
+
+    </form>
+
+</div>

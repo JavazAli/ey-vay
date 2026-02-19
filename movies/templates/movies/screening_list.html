@@ -1,0 +1,58 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'accounts/css/movies.css' %}">
+
+{% if messages %}
+  <div class="messages-container">
+    {% for message in messages %}
+      <div class="alert {{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<div class="container">
+
+    <!-- هدر -->
+    <div class="page-header">
+        <h1>مدیریت اکران‌ها</h1>
+
+        <div class="header-buttons">
+            <a href="{% url 'movies:screening_add' %}" class="add-btn">
+                افزودن اکران جدید
+            </a>
+            <a href="/accounts/admin-panel" class="back-btn">
+                بازگشت به پنل ادمین
+            </a>
+        </div>
+    </div>
+
+    <!-- کارت جدول -->
+    <div class="table-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>فیلم</th>
+                    <th>سینما</th>
+                    <th>سانس</th>
+                    <th>ظرفیت</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for screening in screenings %}
+                <tr>
+                    <td>{{ screening.movie }}</td>
+                    <td>{{ screening.cinema }}</td>
+                    <td>{{ screening.showtime }}</td>
+                    <td>{{ screening.remaining_seats }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align:center;">هیچ اکرانی ثبت نشده است.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>

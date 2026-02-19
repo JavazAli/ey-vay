@@ -1,0 +1,212 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>مدیریت سینماها</title>
+
+    <!-- فونت و CSS اختصاصی -->
+    <link rel="stylesheet" href="{% static 'accounts/css/movies.css' %}">
+
+    <!-- Bootstrap برای جدول و دکمه‌ها -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+    <style>
+        /* ===== صفحه ===== */
+        body {
+            font-family: Vazirmatn, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+            direction: rtl;
+        }
+
+        .container {
+            width: 75%;
+            margin: 40px auto;
+        }
+
+        /* ===== هدر ===== */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            font-size: 36px;
+            font-weight: 800;
+            color: #333;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .back-btn {
+            background-color: #6b7280a3;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .back-btn:hover {
+            background-color: #4b5563;
+        }
+
+        .add-btn {
+            background: #ef4444;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .add-btn:hover {
+            background: #dc2626;
+        }
+
+        /* ===== کارت جدول ===== */
+        .table-card {
+            background: white;
+            border-radius: 16px;
+            padding: 10px 0;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f9fafb;
+            padding: 14px;
+            font-weight: bold;
+            color: #444;
+            border-bottom: 1px solid #eee;
+            text-align: center; /* اضافه شد برای وسط‌چین کردن ستون‌ها */
+        }
+
+        td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #f1f1f1;
+            vertical-align: middle;
+        }
+
+        /* دکمه‌های عملیات */
+        .edit-btn {
+            background: #ffba59;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            margin-left: 6px;
+        }
+
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        /* پیام‌ها */
+        .messages-container {
+            width: auto;
+            max-width: 400px;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .alert {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            color: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .alert.success { background-color: #24c45fb7; }
+        .alert.error { background-color: #ef4444e6; }
+        .alert.warning { background-color: #facc15e0; color: #000; }
+        .alert.info { background-color: #3ba2f6da; }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- پیام‌ها -->
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="alert {{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- هدر -->
+    <div class="page-header">
+        <h1>مدیریت سینماها</h1>
+        <div class="header-buttons">
+            <a href="{% url 'cinema_create' %}" class="add-btn">افزودن سینمای جدید</a>
+            <a href="{% url 'showtime_list' %}" class="add-btn" style="background: #6b6e70;">مدیریت سانس‌ها</a>
+            <a href="/accounts/admin-panel" class="back-btn">بازگشت به پنل ادمین</a>
+        </div>
+    </div>
+
+    <!-- کارت جدول -->
+    <div class="table-card">
+        <table>
+            <tr>
+                <th>نام</th>
+                <th>ظرفیت</th>
+                <th>تعداد سانس‌ها</th>
+                <th>عملیات</th>
+            </tr>
+            {% for cinema in cinemas %}
+            <tr>
+                <td>{{ cinema.name }}</td>
+                <td>{{ cinema.capacity }}</td>
+                <td>{{ cinema.showtimes.count }}</td>
+                <td>
+                    <a href="{% url 'cinema_update' cinema.id %}" class="edit-btn">ویرایش</a>
+                    <a href="{% url 'cinema_delete' cinema.id %}" class="delete-btn">حذف</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center py-4 text-muted">
+                    هیچ سینمایی ثبت نشده است.
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

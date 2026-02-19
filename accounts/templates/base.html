@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}گیشه{% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Vazir', 'Tahoma', Arial, sans-serif;
+            background-color: #e0e0e0;
+            min-height: 100vh;
+            direction: rtl;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* استایل پیام‌ها */
+        .messages {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            min-width: 300px;
+        }
+        
+        .messages li {
+            list-style: none;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .messages li.success { 
+            background-color: #d4edda; 
+            color: #155724; 
+        }
+        
+        .messages li.error { 
+            background-color: #f8d7da; 
+            color: #721c24; 
+        }
+        
+        .messages li.warning { 
+            background-color: #fff3cd; 
+            color: #856404; 
+        }
+        
+        .messages li.info { 
+            background-color: #d1ecf1; 
+            color: #0c5460; 
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    
+    {% block content %}
+    {% endblock %}
+    
+    {% block extra_js %}
+    <script>
+        // حذف خودکار پیام‌ها بعد از 5 ثانیه
+        setTimeout(function() {
+            const messages = document.querySelector('.messages');
+            if (messages) {
+                messages.style.transition = 'opacity 0.5s';
+                messages.style.opacity = '0';
+                setTimeout(() => messages.remove(), 500);
+            }
+        }, 5000);
+    </script>
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,45 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'accounts/css/movies.css' %}">
+
+<div class="form-card">
+
+    <h2>تعریف اکران جدید</h2>
+
+    {% if messages %}
+      <div class="messages-container">
+        {% for message in messages %}
+          <div class="alert {{ message.tags }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <label>فیلم</label>
+        {{ form.movie }}
+
+        <label>سینما</label>
+        {{ form.cinema }}
+
+        <label>سانس</label>
+        {{ form.showtime }}
+
+        <label>ظرفیت اولیه</label>
+        {{ form.remaining_seats }}
+
+        <div class="form-buttons">
+            <button type="submit" class="submit-btn">
+                ثبت اکران
+            </button>
+
+            <a href="{% url 'movies:screening_list' %}" class="cancel-btn">
+                انصراف
+            </a>
+        </div>
+
+    </form>
+
+</div>

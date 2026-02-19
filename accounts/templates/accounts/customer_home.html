@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}صفحه مشتری - سیستم رزرو بلیط سینما{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #e0e0e0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .customer-panel {
+        background: white;
+        border-radius: 15px;
+        padding: 40px;
+        margin: 20px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.15);
+        max-width: 800px;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .customer-header h1 {
+        color: #333;
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+    
+    .customer-welcome {
+        background: linear-gradient(135deg, #d9534f 0%, #c9302c 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+    }
+    
+    .logout-btn {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 30px;
+        background-color: #d9534f;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+    
+    .logout-btn:hover {
+        background-color: #c9302c;
+        transform: scale(1.05);
+    }
+    .cinema-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 12px 30px;
+    background-color: #0275d8;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.cinema-btn:hover {
+    background-color: #025aa5;
+    transform: scale(1.05);
+}
+
+    
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="customer-panel">
+        <div class="customer-header">
+            <h1>🎬 سامانه رزرو بلیط سینما</h1>
+        </div>
+        
+        <div class="customer-welcome">
+            <h2>خوش آمدید، {{ user.get_full_name|default:user.username }}!</h2>
+            <p>به پنل کاربری خود خوش آمدید</p>
+        </div>
+        
+        <p style="color: #666; margin: 20px 0;">
+    برای شروع رزرو بلیط، ابتدا سینمای مورد نظر خود را انتخاب کنید.
+</p>
+
+<a href="{% url 'accounts:customer_cinema_list' %}" class="cinema-btn">
+    🎥 مشاهده لیست سینماها
+</a>
+
+        
+        <button class="logout-btn" onclick="if(confirm('آیا می‌خواهید خارج شوید؟')) window.location.href='{% url 'accounts:logout' %}';">
+            خروج از حساب کاربری
+        </button>
+    </div>
+</div>
+{% endblock %}

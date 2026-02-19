@@ -1,0 +1,67 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'accounts/css/movies.css' %}">
+
+{% if messages %}
+  <div class="messages-container">
+    {% for message in messages %}
+      <div class="alert {{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<div class="container">
+
+    <!-- هدر -->
+    <div class="page-header">
+        <h1>مدیریت فیلم‌ها</h1>
+
+        <div class="header-buttons">
+            <a href="{% url 'movies:movie_add' %}" class="add-btn">
+                افزودن فیلم جدید
+            </a>
+            <a href="/accounts/admin-panel" class="back-btn">
+                بازگشت به پنل ادمین
+            </a>
+        </div>
+    </div>
+
+
+    <!-- کارت جدول -->
+    <div class="table-card">
+
+        <table>
+            <tr>
+                <th>عنوان</th>
+                <th>ژانر</th>
+                <th>کارگردان</th>
+                <th>بازیگران</th>
+                <th>خلاصه</th>
+                <th>عملیات</th>
+            </tr>
+
+            {% for movie in movies %}
+            <tr>
+                <td>{{ movie.title }}</td>
+                <td>{{ movie.genre }}</td>
+                <td>{{ movie.director }}</td>
+                <td class="actors">{{ movie.actors }}</td>
+                <td class="summary">{{ movie.summary }}</td>
+                <td>
+                    <a href="{% url 'movies:movie_edit' movie.pk %}" class="edit-btn">
+                        ویرایش
+                    </a>
+
+                    <a href="{% url 'movies:movie_delete' movie.pk %}" class="delete-btn">
+                        حذف
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+</div>

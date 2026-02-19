@@ -1,0 +1,70 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'accounts/css/movies.css' %}">
+
+{% if messages %}
+  <div class="messages-container">
+    {% for message in messages %}
+      <div class="alert {{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<div class="form-card">
+
+    <h2>فرم ثبت / ویرایش سینما</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <label>نام سینما</label>
+        {{ form.name }}
+
+        <label>ظرفیت سالن</label>
+        {{ form.capacity }}
+
+        <label>سانس‌ها</label>
+        <div class="checkbox-grid">
+            {% for checkbox in form.showtimes %}
+                <label>
+                    {{ checkbox.tag }} {{ checkbox.choice_label }}
+                </label>
+            {% endfor %}
+        </div>
+
+        <div class="form-buttons">
+            <button type="submit" class="submit-btn">
+                ثبت
+            </button>
+            <a href="{% url 'cinema_list' %}" class="cancel-btn">
+                انصراف
+            </a>
+        </div>
+
+    </form>
+
+</div>
+
+<style>
+/* ===== همان CSS فرم فیلم ===== */
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.checkbox-grid label {
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: block;
+    text-align: center;
+}
+
+.checkbox-grid input {
+    margin-left: 5px;
+}
+</style>

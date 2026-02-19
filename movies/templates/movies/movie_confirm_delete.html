@@ -1,0 +1,37 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'accounts/css/movies.css' %}">
+
+{% if messages %}
+  <div class="messages-container">
+    {% for message in messages %}
+      <div class="alert {{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+
+<div class="form-card">
+
+    <h2>حذف فیلم</h2>
+
+    <p style="text-align:center;">
+        آیا از حذف فیلم
+        <b>{{ movie.title }}</b>
+        مطمئن هستید؟
+    </p>
+
+    <form method="post" class="form-buttons">
+        {% csrf_token %}
+
+        <button type="submit" class="submit-btn">
+            بله، حذف شود
+        </button>
+
+        <a href="{% url 'movies:movie_list' %}" class="cancel-btn">
+            انصراف
+        </a>
+    </form>
+
+</div>

@@ -1,0 +1,7 @@
+DB_NAME=cinema_reservation_db
+DB_USER=postgres
+DB_PASSWORD=yourpassword
+DB_HOST=localhost
+DB_PORT=5433
+SECRET_KEY=your-secret-key
+DEBUG=True

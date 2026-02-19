@@ -1,0 +1,70 @@
+<!-- ap_project/accounts/templates/accounts/signup.html -->
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>ثبت‌نام</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'accounts/css/signup.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>ثبت‌نام در سامانه گیشه</h2>
+
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <label for="id_first_name">نام</label>
+            {{ form.first_name }}
+            {% if form.first_name.errors %}
+                <div class="error">{{ form.first_name.errors }}</div>
+            {% endif %}
+
+            <label for="id_last_name">نام خانوادگی</label>
+            {{ form.last_name }}
+            {% if form.last_name.errors %}
+                <div class="error">{{ form.last_name.errors }}</div>
+            {% endif %}
+
+            <label for="id_username">نام کاربری</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <div class="error">{{ form.username.errors }}</div>
+            {% endif %}
+
+            <label for="id_phone_number">شماره تماس</label>
+            {{ form.phone_number }}
+            {% if form.phone_number.errors %}
+                <div class="error">{{ form.phone_number.errors }}</div>
+            {% endif %}
+
+            <label for="id_password1">رمز عبور</label>
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+                <div class="error">{{ form.password1.errors }}</div>
+            {% endif %}
+
+            <label for="id_password2">تایید رمز عبور</label>
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+                <div class="error">{{ form.password2.errors }}</div>
+            {% endif %}
+
+            <button type="submit">ثبت‌نام</button>
+        </form>
+
+        <div class="link">
+            <p>حساب دارید؟ <a href="{% url 'home' %}">صفحه ورود</a></p>
+        </div>
+    </div>
+</body>
+</html>

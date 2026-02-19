@@ -1,0 +1,238 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل مدیریت - سیستم رزرو بلیط سینما</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0e0e0;
+            min-height: 100vh;
+            direction: rtl;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Messages Styling */
+        .messages {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+        
+        .messages li {
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .messages li.success { background-color: #d4edda; color: #155724; }
+        .messages li.error { background-color: #f8d7da; color: #721c24; }
+        .messages li.info { background-color: #d1ecf1; color: #0c5460; }
+        .messages li.warning { background-color: #fff3cd; color: #856404; }
+        
+        /* Admin Panel Styling */
+        .admin-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.15);
+        }
+        
+        .admin-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #d9534f;
+        }
+        
+        .admin-header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .admin-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .admin-welcome {
+            background-color: #d9534f;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .admin-welcome h2 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .admin-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .admin-card {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            color: inherit;
+        }
+        
+        .admin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(217, 83, 79, 0.3);
+            border-color: #d9534f;
+        }
+        
+        .card-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .card-description {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .logout-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 30px;
+            background-color: #d9534f;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .logout-btn:hover {
+            background-color: #c9302c;
+        }
+    </style>
+</head>
+<body>
+    {% if messages %}
+    <div class="container">
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    
+    <div class="container">
+        <div class="admin-panel">
+            <div class="admin-header">
+                <h1>🎬 پنل مدیریت سینما</h1>
+                <p>مدیریت کامل سیستم رزرو بلیط</p>
+            </div>
+            
+            <div class="admin-welcome">
+                <h2>خوش آمدید، {{ admin_name }}!</h2>
+                <p>شما به عنوان مدیر سیستم وارد شده‌اید</p>
+            </div>
+            
+            <div class="admin-cards">
+                <a href="{% url 'cinema_list' %}" class="admin-card">
+                    <div class="card-icon">🎭</div>
+                    <h3 class="card-title">مدیریت سینماها</h3>
+                    <p class="card-description">
+                        افزودن، ویرایش و حذف سینماها
+                        <br>
+                        مدیریت ظرفیت و سانس‌های سالن‌ها
+                    </p>
+                </a>
+                
+                <a href="{% url 'movies:movie_list' %}" class="admin-card">
+                    <div class="card-icon">🎥</div>
+                    <h3 class="card-title">مدیریت فیلم‌ها</h3>
+                    <p class="card-description">
+                        افزودن، ویرایش و حذف فیلم‌ها
+                        <br>
+                        مدیریت اطلاعات فیلم‌ها
+                    </p>
+                </a>
+                
+                <a href="{% url 'reservations:screening_list' %}" class="admin-card">
+                    <div class="card-icon">📅</div>
+                    <h3 class="card-title">تعریف برنامه اکران</h3>
+                    <p class="card-description">
+                        ارتباط فیلم، سینما و سانس
+                        <br>
+                        مدیریت ظرفیت و زمان‌بندی
+                    </p>
+                </a>
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="logout-btn" onclick="if(confirm('آیا می‌خواهید خارج شوید؟')) window.location.href='{% url 'accounts:logout' %}';">
+                    خروج از پنل مدیریت
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // حذف خودکار پیام‌ها بعد از 5 ثانیه
+        setTimeout(function() {
+            const messages = document.querySelector('.messages');
+            if (messages) {
+                messages.style.transition = 'opacity 0.5s';
+                messages.style.opacity = '0';
+                setTimeout(() => messages.remove(), 500);
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

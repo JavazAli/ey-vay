@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>لیست سینماها</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background-color: #1a1a1a; /* مشکی سینمایی */
+            font-family: Vazirmatn, sans-serif;
+            color: #fff;
+        }
+
+        .header-box {
+            background: linear-gradient(135deg, #d9534f 0%, #c9302c 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px auto;
+            max-width: 1400px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        .header-box h2 {
+            margin: 0;
+            font-weight: bold;
+            color: white;
+        }
+
+        .search-box input {
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .cinema-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .cinema-card {
+            background-color: #2a2a2a;
+            border-radius: 12px;
+            padding: 20px;
+            height: 100%;
+            transition: all 0.3s;
+            border: 1px solid #444;
+        }
+
+        .cinema-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+        }
+
+        .cinema-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffdddd;
+        }
+
+        .cinema-info {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .cinema-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #d9534f;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .cinema-btn:hover {
+            background-color: #b52b27;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- هدر -->
+    <div class="header-box d-flex justify-content-between align-items-center">
+        <h2>🎥 لیست سینماها</h2>
+
+        <form class="d-flex search-box" method="get">
+            <input type="text"
+                   name="q"
+                   class="form-control"
+                   placeholder="جستجو بر اساس نام سینما..."
+                   value="{{ query }}">
+            <button class="btn btn-light ms-2">جستجو</button>
+        </form>
+    </div>
+
+    <!-- گرید سینماها -->
+    <div class="cinema-grid">
+        {% if cinemas %}
+            <div class="row g-4">
+                {% for cinema in cinemas %}
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="cinema-card d-flex flex-column">
+                            <div class="cinema-title">{{ cinema.name }}</div>
+
+                            <div class="cinema-info">ظرفیت: {{ cinema.capacity }}</div>
+                            <div class="cinema-info">تعداد سانس‌ها: {{ cinema.showtimes.count }}</div>
+
+                            <a href="{% url 'accounts:customer_movie_list' cinema.id %}" class="cinema-btn mt-auto">
+                                🎬 مشاهده فیلم‌های این سینما
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-center text-light mt-4">هیچ سینمایی یافت نشد.</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>

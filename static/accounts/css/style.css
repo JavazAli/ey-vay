@@ -1,0 +1,124 @@
+/* ساختار کلی صفحه */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e0e0e0;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: block; /* مهم: flex را حذف می‌کنیم */
+}
+
+/* باکس فرم */
+.container {
+    text-align: center;
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.15);
+    width: 350px;
+    margin: 140px auto 0 auto; 
+}
+
+/* عنوان */
+h1 {
+    text-align: center !important;
+}
+
+h2 { 
+    direction: rtl;
+    text-align: center; 
+    color: #333; 
+}
+
+/* فرم */
+form { 
+    direction: rtl;
+    text-align: right;
+    display: flex; 
+    flex-direction: column; 
+}
+
+label { 
+    direction: rtl;
+    text-align: right;
+    margin: 10px 0 5px; 
+}
+
+input {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+/* خطاهای فرم */
+.error {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+/* دکمه */
+button {
+    margin-top: 20px;
+    padding: 12px;
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover { 
+    background-color: #c9302c;
+}
+
+/* لینک پایین فرم */
+.link { 
+    text-align: center; 
+    margin-top: 15px; 
+}
+
+.link a { 
+    color: #d9534f;
+    text-decoration: none; 
+}
+
+.link a:hover { 
+    text-decoration: underline; 
+}
+
+/* نوار پیام‌ها */
+.messages {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    min-width: 300px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* آیتم‌های پیام */
+.messages li {
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    animation: slideDown 0.3s ease-out;
+}
+
+/* رنگ پیام‌ها */
+.messages li.success { background-color: #d4edda; color: #155724; }
+.messages li.error { background-color: #f8d7da; color: #721c24; }
+.messages li.warning { background-color: #fff3cd; color: #856404; }
+.messages li.info { background-color: #d1ecf1; color: #0c5460; }
+
+/* انیمیشن */
+@keyframes slideDown {
+    from { transform: translateY(-100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}

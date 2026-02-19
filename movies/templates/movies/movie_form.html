@@ -1,0 +1,48 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'accounts/css/movies.css' %}">
+
+{% if messages %}
+  <div class="messages-container">
+    {% for message in messages %}
+      <div class="alert {{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<div class="form-card">
+
+    <h2>فرم ثبت / ویرایش فیلم</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <label>عنوان فیلم</label>
+        {{ form.title }}
+
+        <label>ژانر</label>
+        {{ form.genre }}
+
+        <label>کارگردان</label>
+        {{ form.director }}
+
+        <label>بازیگران اصلی</label>
+        {{ form.actors }}
+
+        <label>خلاصه داستان</label>
+        {{ form.summary }}
+
+        <div class="form-buttons">
+            <button type="submit" class="submit-btn">
+                ثبت
+            </button>
+
+            <a href="{% url 'movies:movie_list' %}" class="cancel-btn">
+                انصراف
+            </a>
+        </div>
+
+    </form>
+
+</div>
