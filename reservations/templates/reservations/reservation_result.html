@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نتیجه رزرو</title>
+    <style>
+        body {
+            font-family: Tahoma, sans-serif;
+            background: #121212;
+            color: #fff;
+            margin: 0;
+            padding: 30px 15px;
+        }
+
+        .box {
+            max-width: 720px;
+            margin: 0 auto;
+            border-radius: 14px;
+            border: 1px solid #333;
+            background: #1e1e1e;
+            padding: 24px;
+        }
+
+        .title { margin-top: 0; }
+        .success { color: #7CFF9E; }
+        .error { color: #FFA2A2; }
+
+        .row { margin-bottom: 10px; }
+
+        .actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            text-decoration: none;
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid #555;
+            display: inline-block;
+        }
+
+        .btn-primary { background: #8b1f2a; border-color: #8b1f2a; }
+        .btn-secondary { background: #3f3f3f; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        {% if success and reservation %}
+            <h2 class="title success">✅ رزرو با موفقیت انجام شد</h2>
+
+            <div class="row"><strong>کد پیگیری:</strong> {{ reservation.code }}</div>
+            <div class="row"><strong>نام فیلم:</strong> {{ screening.movie.title }}</div>
+            <div class="row"><strong>نام سینما:</strong> {{ screening.cinema.name }}</div>
+            <div class="row"><strong>سانس:</strong> {{ screening.showtime.date }} - {{ screening.showtime.start_time|time:"H:i" }}</div>
+            <div class="row"><strong>تعداد صندلی:</strong> {{ reservation.seats }}</div>
+        {% else %}
+            <h2 class="title error">❌ رزرو ناموفق بود</h2>
+            <div class="row">{{ error_message|default:"خطایی در فرایند رزرو رخ داد." }}</div>
+
+            {% if screening %}
+                <div class="row"><strong>فیلم:</strong> {{ screening.movie.title }}</div>
+                <div class="row"><strong>سینما:</strong> {{ screening.cinema.name }}</div>
+                <div class="row"><strong>سانس:</strong> {{ screening.showtime.date }} - {{ screening.showtime.start_time|time:"H:i" }}</div>
+                <div class="row"><strong>ظرفیت باقیمانده فعلی:</strong> {{ screening.remaining_seats }}</div>
+                {% if seats %}
+                    <div class="row"><strong>تعداد درخواستی:</strong> {{ seats }}</div>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+
+        <div class="actions">
+            {% if screening %}
+                <a class="btn btn-primary" href="{% url 'accounts:customer_movie_detail' screening.cinema.id screening.movie.id %}">
+                    بازگشت به جزئیات فیلم
+                </a>
+                <a class="btn btn-secondary" href="{% url 'accounts:customer_movie_list' screening.cinema.id %}">
+                    بازگشت به لیست فیلم‌ها
+                </a>
+            {% else %}
+                <a class="btn btn-secondary" href="{% url 'accounts:customer_cinema_list' %}">
+                    بازگشت به سینماها
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
