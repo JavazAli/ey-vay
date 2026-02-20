@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>جزئیات فیلم {{ movie.title }}</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>جزئیات فیلم - {{ movie.title }}</title>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css"
+    >
     <style>
         body {
-            background-color: #121212;
-            color: #f1f1f1;
-            font-family: Vazirmatn, sans-serif;
+            background: #121212;
+            color: #f0f0f0;
+            font-family: Tahoma, sans-serif;
         }
 
         .page-wrapper {
@@ -18,7 +21,8 @@
             padding: 0 15px;
         }
 
-        .movie-box {
+        .movie-box,
+        .showtimes-box {
             background: #1f1f1f;
             border: 1px solid #333;
             border-radius: 14px;
@@ -45,21 +49,11 @@
             white-space: pre-line;
         }
 
-        .showtimes-box {
-            background: #1f1f1f;
-            border: 1px solid #333;
-            border-radius: 14px;
-            padding: 24px;
-        }
-
         .showtime-card {
             background: #2a2a2a;
             border: 1px solid #3a3a3a;
             border-radius: 10px;
             padding: 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             margin-bottom: 12px;
         }
 
@@ -70,20 +64,9 @@
             font-weight: 700;
         }
 
-        .capacity-ok {
-            background: #1f7a3f;
-            color: #d8ffdf;
-        }
-
-        .capacity-low {
-            background: #8a6320;
-            color: #fff3dc;
-        }
-
-        .capacity-full {
-            background: #8b1f2a;
-            color: #ffe1e5;
-        }
+        .capacity-ok { background: #1f7a3f; color: #d8ffdf; }
+        .capacity-low { background: #8a6320; color: #fff3dc; }
+        .capacity-full { background: #8b1f2a; color: #ffe1e5; }
 
         .section-title {
             font-size: 1.2rem;
@@ -91,17 +74,21 @@
             color: #ffffff;
         }
 
-        .back-btn {
-            margin-top: 20px;
+        .reservation-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            margin-top: 10px;
         }
 
-        .selected-note {
-            margin-top: 14px;
-            background: #0f3b52;
-            border: 1px solid #1d5a79;
-            border-radius: 10px;
-            padding: 12px;
-            color: #d7f1ff;
+        .seat-input {
+            width: 110px;
+            background: #111;
+            color: #fff;
+            border: 1px solid #555;
+            border-radius: 8px;
+            padding: 6px 10px;
         }
     </style>
 </head>
@@ -109,7 +96,6 @@
 <div class="page-wrapper">
     <div class="movie-box">
         <h1 class="movie-title">🎬 {{ movie.title }}</h1>
-
         <div class="meta-item">سینما: {{ cinema.name }}</div>
         <div class="meta-item">ژانر: {{ movie.genre|default:"-" }}</div>
         <div class="meta-item">کارگردان: {{ movie.director|default:"-" }}</div>
@@ -117,25 +103,24 @@
         {% if movie.year %}
             <div class="meta-item">سال ساخت: {{ movie.year }}</div>
         {% endif %}
-
         <div class="summary">
             {{ movie.summary|default:"برای این فیلم خلاصه‌ای ثبت نشده است." }}
         </div>
     </div>
 
     <div class="showtimes-box">
-        <h2 class="section-title">انتخاب سانس و مشاهده ظرفیت باقی‌مانده</h2>
+        <h2 class="section-title">انتخاب سانس و رزرو</h2>
 
         {% if screenings %}
             {% for screening in screenings %}
                 <div class="showtime-card">
-                    <div>
-                        <strong>{{ screening.showtime.date }}</strong>
-                        <span class="mx-2">|</span>
-                        <strong>{{ screening.showtime.start_time|time:"H:i" }}</strong>
-                    </div>
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div>
+                            <strong>{{ screening.showtime.date }}</strong>
+                            <span class="mx-2">|</span>
+                            <strong>{{ screening.showtime.start_time|time:"H:i" }}</strong>
+                        </div>
 
-                    <div class="d-flex align-items-center gap-2">
                         {% if screening.remaining_seats == 0 %}
                             <span class="capacity-pill capacity-full">تکمیل ظرفیت</span>
                         {% elif screening.remaining_seats <= 5 %}
@@ -143,27 +128,36 @@
                         {% else %}
                             <span class="capacity-pill capacity-ok">ظرفیت باقی‌مانده: {{ screening.remaining_seats }}</span>
                         {% endif %}
-
-                        <a
-                            class="btn btn-outline-light btn-sm"
-                            href="?screening={{ screening.id }}"
-                        >انتخاب سانس</a>
                     </div>
+
+                    <form class="reservation-form" method="post" action="{% url 'reservations:create_reservation' screening.id %}">
+                        {% csrf_token %}
+                        <label for="seats-{{ screening.id }}" class="mb-0">تعداد صندلی:</label>
+                        <input
+                            id="seats-{{ screening.id }}"
+                            name="seats"
+                            type="number"
+                            min="1"
+                            max="{{ screening.remaining_seats }}"
+                            value="1"
+                            class="seat-input"
+                            {% if screening.remaining_seats == 0 %}disabled{% endif %}
+                        >
+                        <button
+                            type="submit"
+                            class="btn btn-sm btn-danger"
+                            {% if screening.remaining_seats == 0 %}disabled{% endif %}
+                        >
+                            ثبت رزرو
+                        </button>
+                    </form>
                 </div>
             {% endfor %}
-
-            {% if selected_screening %}
-                <div class="selected-note">
-                    سانس انتخاب‌شده: {{ selected_screening.showtime.date }} -
-                    {{ selected_screening.showtime.start_time|time:"H:i" }}
-                    (ظرفیت فعلی: {{ selected_screening.remaining_seats }})
-                </div>
-            {% endif %}
         {% else %}
             <p class="mb-0">در حال حاضر سانس فعالی برای این فیلم در {{ cinema.name }} ثبت نشده است.</p>
         {% endif %}
 
-        <a href="{% url 'accounts:customer_movie_list' cinema.id %}" class="btn btn-secondary back-btn">بازگشت به لیست فیلم‌ها</a>
+        <a href="{% url 'accounts:customer_movie_list' cinema.id %}" class="btn btn-secondary mt-2">بازگشت به لیست فیلم‌ها</a>
     </div>
 </div>
 </body>
