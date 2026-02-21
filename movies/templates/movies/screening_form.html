@@ -3,7 +3,7 @@
 
 <div class="form-card">
 
-    <h2>تعریف اکران جدید</h2>
+    <h2>فرم ثبت/ویرایش اکران </h2>
 
     {% if messages %}
       <div class="messages-container">
@@ -43,3 +43,48 @@
     </form>
 
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const cinemaSelect = document.getElementById("id_cinema");
+    const showtimeSelect = document.getElementById("id_showtime");
+
+    function loadShowtimes() {
+        const cinemaId = cinemaSelect.value;
+
+        showtimeSelect.innerHTML = "";
+
+        if (!cinemaId) {
+            showtimeSelect.innerHTML =
+                '<option value="">ابتدا سینما را انتخاب کنید</option>';
+            return;
+        }
+
+        fetch(`/movies/ajax/load-showtimes/?cinema=${cinemaId}`)
+            .then(response => response.json())
+            .then(data => {
+
+                if (data.length === 0) {
+                    showtimeSelect.innerHTML =
+                        '<option value="">سانسی برای این سینما تعریف نشده</option>';
+                    return;
+                }
+
+                showtimeSelect.innerHTML =
+                    '<option value="">انتخاب سانس</option>';
+
+                data.forEach(function(showtime) {
+                    const option = document.createElement("option");
+                    option.value = showtime.id;
+                    option.text = showtime.text;
+                    showtimeSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error("خطا:", error);
+            });
+    }
+
+    cinemaSelect.addEventListener("change", loadShowtimes);
+});
+</script>

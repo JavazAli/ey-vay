@@ -24,6 +24,21 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
 
+        .back-btn {
+            background-color: #fff;
+            color: #c9302c;
+            font-weight: bold;
+            padding: 8px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: #f2f2f2;
+            transform: translateY(-2px);
+        }
+
         .movie-grid {
             max-width: 1400px;
             margin: 0 auto;
@@ -58,7 +73,7 @@
         select.form-select {
             direction: rtl;
             padding-right: 12px;
-            padding-left: 30px; /* جا برای فلش سمت چپ */
+            padding-left: 30px;
             background-position: left 0.75rem center;
         }
 
@@ -67,47 +82,59 @@
             border-radius: 8px;
             padding: 8px;
         }
-        
-        
     </style>
 </head>
 
 <body>
-
     <!-- هدر -->
     <div class="header-box">
-        <h2>🎬 فیلم‌های در حال اکران در {{ cinema.name }}</h2>
 
-        <form method="get" class="row mt-3 filter-box">
-            <div class="col-md-4">
-                <input type="text" name="search" class="form-control"
-                       placeholder="جستجو بر اساس نام فیلم..."
-                       value="{{ search }}">
-            </div>
+    <!-- ردیف دکمه + تیتر -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
 
-            <div class="col-md-3">
-                <select name="genre" class="form-select">
-                    <option value="">ژانر (همه)</option>
-                    {% for g in genres %}
-                        <option value="{{ g }}" {% if genre_selected == g %}selected{% endif %}>{{ g }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+        <!-- تیتر سمت راست -->
+        <h2 class="m-0">🎬 فیلم‌های در حال اکران در {{ cinema.name }}</h2>
 
-            <div class="col-md-3">
-                <select name="year" class="form-select">
-                    <option value="">سال ساخت (همه)</option>
-                    {% for y in years %}
-                        <option value="{{ y }}" {% if year_selected == y %}selected{% endif %}>{{ y }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="col-md-2">
-                <button class="btn btn-light w-100">فیلتر</button>
-            </div>
-        </form>
+        <!-- دکمه سمت چپ -->
+        <a href="{% url 'accounts:customer_cinema_list' %}" class="back-btn">
+            ⬅ بازگشت به سینماها
+        </a>
     </div>
+
+    <form method="get" class="row mt-3 filter-box">
+        <div class="col-md-4">
+            <input type="text" name="search" class="form-control"
+                   placeholder="جستجو بر اساس نام فیلم..."
+                   value="{{ search }}">
+        </div>
+
+        <div class="col-md-3">
+            <select name="genre" class="form-select">
+                <option value="">ژانر (همه)</option>
+                {% for g in genres %}
+                    <option value="{{ g }}" {% if genre_selected == g %}selected{% endif %}>{{ g }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select name="year" class="form-select">
+                <option value="">سال ساخت (همه)</option>
+                {% for y in years %}
+                    <option value="{{ y }}" {% if year_selected == y %}selected{% endif %}>{{ y }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <button class="btn btn-light w-100">فیلتر</button>
+        </div>
+    </form>
+</div>
+
+    </form>
+</div>
+
 
     <!-- گرید فیلم‌ها -->
     <div class="movie-grid">

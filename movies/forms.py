@@ -1,6 +1,9 @@
 from django import forms
-from .models import Movie , Screening
+from .models import Movie, Screening, ShowTime
 
+# =========================
+# فرم فیلم
+# =========================
 class MovieForm(forms.ModelForm):
     class Meta:
         model = Movie
@@ -17,50 +20,40 @@ class MovieForm(forms.ModelForm):
             "actors": forms.Textarea(attrs={"rows": 3}),
         }
 
-
+# =========================
+# فرم اکران
+# =========================
 from django import forms
 from .models import Screening
+from cinemas.models import ShowTime
+
 
 class ScreeningForm(forms.ModelForm):
     class Meta:
         model = Screening
-        fields = [
-            'cinema',
-            'movie',
-            'showtime',
-            'remaining_seats'
-        ]
-        labels = {
-            'cinema': 'سینما',
-            'movie': 'فیلم',
-            'showtime': 'سانس',
-            'remaining_seats': 'ظرفیت اولیه',
-        }
+        fields = "__all__"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # اجازه بده فرم این فیلد خالی باشد
-        self.fields['remaining_seats'].required = False
 
-    def clean(self):
-        cleaned_data = super().clean()
-        cinema = cleaned_data.get("cinema")
-        movie = cleaned_data.get("movie")
-        showtime = cleaned_data.get("showtime")
-        remaining_seats = cleaned_data.get("remaining_seats")
+        # در ابتدا هیچ سانسی نمایش داده نشود
+        self.fields["showtime"].queryset = ShowTime.objects.none()
 
-        # جلوگیری از ثبت تکراری
-        if Screening.objects.filter(
-            cinema=cinema,
-            movie=movie,
-            showtime=showtime
-        ).exists():
-            raise forms.ValidationError(
-                "این اکران قبلاً ثبت شده است."
+        # اگر فرم POST شده باشد
+        if "cinema" in self.data and "movie" in self.data:
+            try:
+                cinema_id = int(self.data.get("cinema"))
+                movie_id = int(self.data.get("movie"))
+
+                self.fields["showtime"].queryset = ShowTime.objects.filter(
+                    cinema_id=cinema_id
+                )
+
+            except (ValueError, TypeError):
+                pass
+
+        # هنگام ویرایش
+        elif self.instance.pk:
+            self.fields["showtime"].queryset = ShowTime.objects.filter(
+                cinema=self.instance.cinema
             )
-
-        # اگر کاربر ظرفیت وارد نکرده بود، از ظرفیت سالن استفاده کن
-        if remaining_seats is None and cinema is not None:
-            cleaned_data['remaining_seats'] = cinema.capacity
-
-        return cleaned_data
