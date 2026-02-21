@@ -1,7 +1,9 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from accounts.models import User
+from decimal import Decimal
+
+from accounts.models import User, Wallet
 from cinemas.models import Cinema, ShowTime
 from movies.models import Movie, Screening
 
@@ -69,3 +71,31 @@ class CustomerMovieDetailViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["selected_screening"], self.screening)
+
+class WalletViewTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="wallet_user",
+            password="testpass123",
+            phone_number="09120000999",
+            role="customer",
+        )
+
+    def test_wallet_topup_increases_balance(self):
+        self.client.login(username="wallet_user", password="testpass123")
+
+        response = self.client.post(reverse("accounts:wallet"), {"amount": "12.50"}, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        wallet = Wallet.objects.get(user=self.user)
+        self.assertEqual(wallet.balance, Decimal("12.50"))
+
+    def test_wallet_topup_rejects_non_positive_amount(self):
+        self.client.login(username="wallet_user", password="testpass123")
+
+        response = self.client.post(reverse("accounts:wallet"), {"amount": "0"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "مبلغ باید یک عدد مثبت باشد")
+        wallet = Wallet.objects.get(user=self.user)
+        self.assertEqual(wallet.balance, Decimal("0"))

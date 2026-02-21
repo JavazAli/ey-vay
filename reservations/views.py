@@ -1,8 +1,11 @@
+from decimal import Decimal
+
 from django.db import transaction
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_http_methods
 
 from accounts.decorators import login_required_custom
+from accounts.models import Wallet
 from movies.models import Screening
 
 from .factories import ReservationFactory
@@ -32,6 +35,8 @@ def create_reservation(request, screening_id):
         )
 
     seats = form.cleaned_data["seats"]
+    payment_method = form.cleaned_data["payment_method"]
+    total_amount = Decimal(seats)
 
     with transaction.atomic():
         screening = (
@@ -52,6 +57,22 @@ def create_reservation(request, screening_id):
                 },
             )
 
+        if payment_method == "wallet":
+            wallet, _ = Wallet.objects.select_for_update().get_or_create(user=request.user)
+            if wallet.balance < total_amount:
+                return render(
+                    request,
+                    "reservations/reservation_result.html",
+                    {
+                        "success": False,
+                        "error_message": "موجودی ناکافی",
+                        "screening": screening,
+                        "seats": seats,
+                    },
+                )
+            wallet.balance -= total_amount
+            wallet.save(update_fields=["balance"])
+
         screening.remaining_seats -= seats
         screening.save(update_fields=["remaining_seats"])
 
@@ -68,6 +89,8 @@ def create_reservation(request, screening_id):
             "success": True,
             "reservation": reservation,
             "screening": reservation.screening,
+            "payment_method": payment_method,
+            "total_amount": total_amount,
         },
     )
 

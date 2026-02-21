@@ -143,6 +143,11 @@
                             class="seat-input"
                             {% if screening.remaining_seats == 0 %}disabled{% endif %}
                         >
+                        <label for="payment-{{ screening.id }}" class="mb-0">روش پرداخت:</label>
+                        <select id="payment-{{ screening.id }}" name="payment_method" class="seat-input" {% if screening.remaining_seats == 0 %}disabled{% endif %}>
+                            <option value="normal">پرداخت عادی</option>
+                            <option value="wallet">پرداخت از طریق کیف پول</option>
+                        </select>
                         <button
                             type="submit"
                             class="btn btn-sm btn-danger"

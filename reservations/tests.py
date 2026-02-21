@@ -1,9 +1,10 @@
 from datetime import date, time
+from decimal import Decimal
 
 from django.test import TestCase
 from django.urls import reverse
 
-from accounts.models import User
+from accounts.models import User, Wallet
 from cinemas.models import Cinema, ShowTime
 from movies.models import Movie, Screening
 from reservations.models import Reservation
@@ -38,7 +39,7 @@ class ReservationFlowTests(TestCase):
     def test_reservation_success_decreases_capacity(self):
         response = self.client.post(
             reverse("reservations:create_reservation", args=[self.screening.id]),
-            {"seats": 2},
+            {"seats": 2, "payment_method": "normal"},
         )
 
         self.assertEqual(response.status_code, 200)
@@ -54,12 +55,46 @@ class ReservationFlowTests(TestCase):
     def test_reservation_fails_when_capacity_insufficient(self):
         response = self.client.post(
             reverse("reservations:create_reservation", args=[self.screening.id]),
-            {"seats": 6},
+            {"seats": 6, "payment_method": "normal"},
         )
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "ظرفیت کافی برای رزرو وجود ندارد")
 
+        self.screening.refresh_from_db()
+        self.assertEqual(self.screening.remaining_seats, 5)
+        self.assertEqual(Reservation.objects.count(), 0)
+
+    def test_wallet_payment_success(self):
+        wallet = Wallet.objects.create(user=self.user, balance=Decimal("10.00"))
+
+        response = self.client.post(
+            reverse("reservations:create_reservation", args=[self.screening.id]),
+            {"seats": 3, "payment_method": "wallet"},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "رزرو با موفقیت انجام شد")
+
+        wallet.refresh_from_db()
+        self.assertEqual(wallet.balance, Decimal("7.00"))
+        self.screening.refresh_from_db()
+        self.assertEqual(self.screening.remaining_seats, 2)
+        self.assertEqual(Reservation.objects.count(), 1)
+
+    def test_wallet_payment_fails_with_insufficient_balance(self):
+        wallet = Wallet.objects.create(user=self.user, balance=Decimal("1.00"))
+
+        response = self.client.post(
+            reverse("reservations:create_reservation", args=[self.screening.id]),
+            {"seats": 3, "payment_method": "wallet"},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "موجودی ناکافی")
+
+        wallet.refresh_from_db()
+        self.assertEqual(wallet.balance, Decimal("1.00"))
         self.screening.refresh_from_db()
         self.assertEqual(self.screening.remaining_seats, 5)
         self.assertEqual(Reservation.objects.count(), 0)

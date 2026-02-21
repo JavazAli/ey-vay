@@ -44,3 +44,16 @@ class SignupForm(UserCreationForm):
         if not phone.isdigit():
             raise forms.ValidationError("شماره تلفن فقط می‌تواند شامل اعداد باشد.")
         return phone
+
+
+class WalletTopUpForm(forms.Form):
+    amount = forms.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        min_value=0.01,
+        label="مبلغ افزایش اعتبار",
+        error_messages={
+            "invalid": "مبلغ معتبر نیست.",
+            "min_value": "مبلغ باید یک عدد مثبت باشد.",
+        },
+    )
