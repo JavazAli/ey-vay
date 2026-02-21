@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}کیف پول{% endblock %}
+
+{% block extra_css %}
+<style>
+    .wallet-card {
+        max-width: 640px;
+        margin: 40px auto;
+        background: #fff;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .balance {
+        font-size: 1.6rem;
+        color: #0d6efd;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .field {
+        margin-bottom: 14px;
+    }
+
+    .field input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+
+    .error-list {
+        color: #b02a37;
+        margin-top: 8px;
+        margin-bottom: 10px;
+    }
+
+    .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        border: none;
+        border-radius: 8px;
+        padding: 10px 16px;
+        color: #fff;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background: #198754;
+    }
+
+    .btn-secondary {
+        background: #6c757d;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="wallet-card">
+        <h2>کیف پول من</h2>
+        <p class="balance">موجودی فعلی: {{ wallet.balance }} تومان</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="field">
+                {{ form.amount.label_tag }}
+                {{ form.amount }}
+                {% if form.amount.errors %}
+                    <ul class="error-list">
+                        {% for error in form.amount.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="actions">
+                <button type="submit" class="btn btn-primary">افزایش اعتبار</button>
+                <a href="{% url 'accounts:customer_home' %}" class="btn btn-secondary">بازگشت</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

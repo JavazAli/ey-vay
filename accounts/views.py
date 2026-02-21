@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.views.generic import TemplateView
-from .forms import PhoneLoginForm, SignupForm
-from .models import User
+from .forms import PhoneLoginForm, SignupForm, WalletTopUpForm
+from .models import User, Wallet
 from .decorators import admin_required
 from .mixins import AdminRequiredMixin
 from .decorators import login_required_custom 
@@ -94,6 +94,29 @@ class AdminDashboardView(AdminRequiredMixin, TemplateView):
         context['admin_name'] = self.request.user.get_full_name() or self.request.user.username
         return context
     
+@login_required_custom
+def wallet_view(request):
+    wallet, _ = Wallet.objects.get_or_create(user=request.user)
+
+    if request.method == "POST":
+        form = WalletTopUpForm(request.POST)
+        if form.is_valid():
+            wallet.balance += form.cleaned_data["amount"]
+            wallet.save(update_fields=["balance"])
+            messages.success(request, "اعتبار کیف پول با موفقیت افزایش یافت.")
+            return redirect("accounts:wallet")
+    else:
+        form = WalletTopUpForm()
+
+    return render(
+        request,
+        "accounts/wallet.html",
+        {
+            "wallet": wallet,
+            "form": form,
+        },
+    )
+
 @login_required_custom    
 def customer_home(request):
     """

@@ -100,7 +100,10 @@
     🎥 مشاهده لیست سینماها
 </a>
 
-        
+<a href="{% url 'accounts:wallet' %}" class="cinema-btn" style="background-color:#198754;">
+    💳 کیف پول و افزایش اعتبار
+</a>
+
         <button class="logout-btn" onclick="if(confirm('آیا می‌خواهید خارج شوید؟')) window.location.href='{% url 'accounts:logout' %}';">
             خروج از حساب کاربری
         </button>

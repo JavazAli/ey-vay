@@ -16,6 +16,7 @@ urlpatterns = [
     # خروج
     path('logout/', views.logout_view, name='logout'),
     path("customer/home/", views.customer_home, name="customer_home"),
+    path("customer/wallet/", views.wallet_view, name="wallet"),
 
     #صفحه سینما ها برای مشتری
     path("customer/cinemas/", views.customer_cinema_list, name="customer_cinema_list"),

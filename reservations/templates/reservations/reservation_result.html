@@ -58,6 +58,12 @@
             <div class="row"><strong>نام سینما:</strong> {{ screening.cinema.name }}</div>
             <div class="row"><strong>سانس:</strong> {{ screening.showtime.date }} - {{ screening.showtime.start_time|time:"H:i" }}</div>
             <div class="row"><strong>تعداد صندلی:</strong> {{ reservation.seats }}</div>
+            {% if total_amount %}
+                <div class="row"><strong>مبلغ پرداختی:</strong> {{ total_amount }}</div>
+            {% endif %}
+            {% if payment_method == "wallet" %}
+                <div class="row"><strong>روش پرداخت:</strong> کیف پول</div>
+            {% endif %}
         {% else %}
             <h2 class="title error">❌ رزرو ناموفق بود</h2>
             <div class="row">{{ error_message|default:"خطایی در فرایند رزرو رخ داد." }}</div>
