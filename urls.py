@@ -5,5 +5,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('accounts.urls')),  # مسیرهای accounts
     path("", include("cinemas.urls")),
-
+    
 ]

@@ -30,29 +30,38 @@
     <!-- کارت جدول -->
     <div class="table-card">
         <table>
-            <thead>
-                <tr>
-                    <th>فیلم</th>
-                    <th>سینما</th>
-                    <th>سانس</th>
-                    <th>ظرفیت</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for screening in screenings %}
-                <tr>
-                    <td>{{ screening.movie }}</td>
-                    <td>{{ screening.cinema }}</td>
-                    <td>{{ screening.showtime }}</td>
-                    <td>{{ screening.remaining_seats }}</td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="4" style="text-align:center;">هیچ اکرانی ثبت نشده است.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
+            <tr>
+                <th>فیلم</th>
+                <th>سینما</th>
+                <th>سانس</th>
+                <th>ظرفیت</th>
+                <th>عملیات</th>
+            </tr>
+
+            {% for screening in screenings %}
+            <tr>
+                <td>{{ screening.movie.title }}</td>
+                <td>{{ screening.cinema.name }}</td>
+                <td>{{ screening.showtime }}</td>
+                <td>{{ screening.remaining_seats }}</td>
+                <td>
+                    <a href="{% url 'movies:screening_update' screening.pk %}" class="edit-btn">
+                        ویرایش
+                    </a>
+
+                    <a href="{% url 'movies:screening_delete' screening.pk %}" class="delete-btn">
+                        حذف
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align:center;">هیچ اکرانی ثبت نشده است.</td>
+            </tr>
+            {% endfor %}
+
         </table>
     </div>
 
 </div>
+

@@ -83,14 +83,36 @@
             background-color: #b52b27;
             transform: scale(1.05);
         }
+
+        .back-btn {
+            background-color: #fff;
+            color: #c9302c;
+            font-weight: bold;
+            padding: 8px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: #f2f2f2;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 
 <body>
 
     <!-- هدر -->
-    <div class="header-box d-flex justify-content-between align-items-center">
-        <h2>🎥 لیست سینماها</h2>
+    <div class="header-box">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>🎥 لیست سینماها</h2>
+
+            <a href="{% url 'accounts:customer_home' %}" class="back-btn">
+                ⬅ بازگشت به پنل مشتری
+            </a>
+        </div>
 
         <form class="d-flex search-box" method="get">
             <input type="text"
